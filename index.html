@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TI Verde | Do código ao descarte certo</title>
+<meta name="description" content="TI Verde e lixo eletrônico: números, legislação, como descartar certo e boas práticas para desenvolvedores. Projeto da turma de Eng. de Software 8º semestre, UMC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --verde-escuro:#163828;
+    --verde:#2E6B45;
+    --verde-claro:#E3EBE0;
+    --creme:#F3F0E6;
+    --amarelo:#F2B544;
+    --vermelho:#B5432F;
+    --texto:#1d2b22;
+    --texto-suave:#4a5a4f;
+    --raio:16px;
+    --max:1120px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Figtree",system-ui,sans-serif;color:var(--texto);background:var(--creme);line-height:1.6;font-size:17px;overflow-x:hidden}
+  h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;line-height:1.05;color:var(--verde-escuro)}
+  a{color:inherit}
+  img,svg{display:block;max-width:100%}
+  .container{max-width:var(--max);margin:0 auto;padding:0 20px}
+  .eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--verde);margin-bottom:12px}
+  section{padding:96px 0}
+  .titulo-secao{font-size:clamp(2rem,4.5vw,3.2rem);margin-bottom:20px;max-width:18ch}
+
+  /* ---------- NAV ---------- */
+  nav{position:sticky;top:0;z-index:50;background:rgba(22,56,40,.94);backdrop-filter:blur(8px)}
+  nav .container{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .logo{font-family:"Bricolage Grotesque";font-weight:800;color:var(--creme);text-decoration:none;font-size:1.25rem;display:flex;align-items:center;gap:8px}
+  .logo span{width:10px;height:10px;border-radius:50%;background:var(--amarelo)}
+  nav ul{display:flex;gap:22px;list-style:none}
+  nav ul a{color:#cfdcd2;text-decoration:none;font-size:.92rem;font-weight:500}
+  nav ul a:hover{color:var(--amarelo)}
+  @media (max-width:820px){nav ul{display:none}}
+
+  /* ---------- HERO (estrutura do rascunho) ---------- */
+  .hero{background:var(--verde-escuro);color:var(--creme);padding:72px 0 96px;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;width:640px;height:640px;border-radius:50%;border:1px solid rgba(242,181,68,.18);right:-200px;top:-220px}
+  .hero-topo{border-bottom:1px solid rgba(243,240,230,.15);padding-bottom:48px;margin-bottom:48px}
+  .hero .eyebrow{color:var(--amarelo)}
+  .hero h1{color:var(--creme);font-size:clamp(2.6rem,7vw,5.6rem);font-weight:800;max-width:15ch;letter-spacing:-.02em}
+  .hero h1 em{font-style:normal;color:var(--amarelo)}
+  .hero-sub{margin-top:20px;font-size:1.2rem;color:#cfdcd2;max-width:52ch}
+  .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .foto{position:relative;aspect-ratio:4/3;border-radius:24px;overflow:hidden;background:#1f4a34;box-shadow:0 30px 60px rgba(0,0,0,.3)}
+  .foto svg,.foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .foto img{z-index:2}
+  .hero-texto h2{color:var(--creme);font-size:1.9rem;margin-bottom:16px}
+  .hero-texto p{color:#cfdcd2;margin-bottom:14px}
+  .hero-texto strong{color:var(--creme)}
+  .botoes{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+  .btn{display:inline-block;padding:14px 24px;border-radius:999px;font-weight:700;text-decoration:none;transition:transform .2s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-amarelo{background:var(--amarelo);color:var(--verde-escuro)}
+  .btn-contorno{border:1.5px solid rgba(243,240,230,.5);color:var(--creme)}
+  @media (max-width:820px){.hero-grid{grid-template-columns:1fr}}
+
+  /* animação da ilustração */
+  .pulso{animation:pulso 2.4s ease-in-out infinite}
+  .pulso:nth-of-type(2n){animation-delay:.8s}
+  .pulso:nth-of-type(3n){animation-delay:1.6s}
+  @keyframes pulso{0%,100%{opacity:.35}50%{opacity:1}}
+  .folha{transform-origin:center;transform-box:fill-box;animation:balanca 4s ease-in-out infinite}
+  @keyframes balanca{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+
+  /* ---------- NÚMEROS ---------- */
+  .numeros{background:var(--creme)}
+  .numeros-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:40px}
+  .num-card{background:#fff;border-radius:var(--raio);padding:28px;border:1px solid #e5e0d0}
+  .num{font-family:"Bricolage Grotesque";font-weight:800;font-size:clamp(2.4rem,4vw,3.4rem);color:var(--verde);line-height:1}
+  .num.alerta{color:var(--vermelho)}
+  .num-card p{margin-top:12px;color:var(--texto-suave);font-size:.98rem}
+  @media (max-width:900px){.numeros-grid{grid-template-columns:1fr 1fr}}
+  @media (max-width:520px){.numeros-grid{grid-template-columns:1fr}}
+  .barra-wrap{margin-top:40px;background:#fff;border-radius:var(--raio);padding:28px;border:1px solid #e5e0d0}
+  .barra-wrap h3{font-size:1.25rem;margin-bottom:16px}
+  .barra{height:44px;border-radius:12px;background:#e6dfcc;overflow:hidden;display:flex}
+  .barra-ok{width:0;background:var(--verde);transition:width 1.8s cubic-bezier(.2,.8,.2,1);display:flex;align-items:center;padding-left:14px;color:#fff;font-weight:700;white-space:nowrap}
+  .legenda{display:flex;justify-content:space-between;margin-top:10px;font-size:.9rem;color:var(--texto-suave);gap:12px;flex-wrap:wrap}
+  .fonte{margin-top:20px;font-size:.82rem;color:var(--texto-suave)}
+
+  /* ---------- ENTENDA ---------- */
+  .entenda{background:var(--verde-claro)}
+  .duas-col{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+  @media (max-width:820px){.duas-col{grid-template-columns:1fr;gap:40px}}
+  .entenda h3{font-size:1.6rem;margin-bottom:12px}
+  .chips{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+  .chip{background:var(--creme);border-radius:12px;padding:14px 16px;display:flex;gap:10px;align-items:center;font-weight:700;transition:transform .2s}
+  .chip:hover{transform:translateY(-3px)}
+  .chip svg{width:22px;height:22px;stroke:var(--verde-escuro);fill:none;stroke-width:1.8;flex-shrink:0}
+  .perigo{background:var(--verde-escuro);color:#e6ede8;border-radius:var(--raio);padding:28px;margin-top:28px}
+  .perigo h3{color:var(--amarelo);display:flex;align-items:center;gap:10px;font-size:1.4rem}
+
+  /* ---------- LEI ---------- */
+  .lei{background:var(--creme)}
+  .lei-cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:32px}
+  @media (max-width:820px){.lei-cards{grid-template-columns:1fr}}
+  .lei-card{background:#fff;border-radius:var(--raio);padding:28px;border-left:6px solid var(--verde)}
+  .lei-card h3{font-size:1.2rem;margin-bottom:10px}
+  .ciclo{margin-top:56px}
+  .ciclo h3{font-size:1.6rem;margin-bottom:24px}
+  .ciclo-passos{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;counter-reset:p}
+  .passo{background:var(--verde-escuro);color:#e6ede8;border-radius:14px;padding:20px;position:relative}
+  .passo:last-child{background:var(--verde)}
+  .passo b{display:block;color:var(--amarelo);font-family:"Bricolage Grotesque";font-size:1.8rem;line-height:1;margin-bottom:8px}
+  .passo:not(:last-child)::after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:var(--verde);font-weight:800;z-index:2}
+  @media (max-width:900px){.ciclo-passos{grid-template-columns:1fr}.passo:not(:last-child)::after{content:"↓";right:auto;left:24px;top:auto;bottom:-20px;transform:none}}
+  .perto{margin-top:28px;padding:22px;border-radius:var(--raio);background:var(--verde-claro)}
+
+  /* ---------- FAÇA SUA PARTE ---------- */
+  .parte{background:var(--verde-claro)}
+  .checklist{list-style:none;margin-top:24px;display:grid;gap:12px}
+  .checklist button{width:100%;text-align:left;background:var(--creme);border:2px solid transparent;border-radius:14px;padding:18px;display:flex;gap:14px;align-items:flex-start;font:inherit;color:inherit;cursor:pointer;transition:border-color .2s,background .2s}
+  .checklist button:hover{border-color:var(--verde)}
+  .checklist .bola{width:34px;height:34px;border-radius:50%;background:var(--verde);color:#fff;display:grid;place-items:center;font-weight:700;flex-shrink:0;transition:background .2s}
+  .checklist button[aria-pressed="true"]{background:#fff;border-color:var(--verde)}
+  .checklist button[aria-pressed="true"] .bola{background:var(--amarelo);color:var(--verde-escuro)}
+  .progresso{margin-top:16px;font-weight:700;color:var(--verde)}
+  .onde{list-style:none;margin-top:20px;display:grid;gap:14px}
+  .onde li{display:flex;gap:12px;align-items:flex-start}
+  .onde .ok{color:var(--verde);font-weight:800}
+  .onde .nao{color:var(--vermelho);font-weight:800}
+  .onde a{color:var(--verde);font-weight:700}
+
+  /* ---------- DEVS ---------- */
+  .devs{background:var(--verde-escuro);color:#cfdcd2}
+  .devs .eyebrow{color:var(--amarelo)}
+  .devs .titulo-secao{color:var(--creme)}
+  .devs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+  @media (max-width:900px){.devs-grid{grid-template-columns:1fr 1fr}}
+  @media (max-width:560px){.devs-grid{grid-template-columns:1fr}}
+  .dev-card{border:1px solid rgba(243,240,230,.15);border-radius:var(--raio);padding:24px;transition:background .25s,transform .25s}
+  .dev-card:hover{background:rgba(243,240,230,.06);transform:translateY(-4px)}
+  .dev-card h3{color:var(--amarelo);font-size:1.2rem;margin-bottom:8px}
+  .dev-card code{background:rgba(242,181,68,.15);color:var(--amarelo);padding:1px 6px;border-radius:5px;font-size:.9em}
+  .meta{grid-column:span 1;background:rgba(46,107,69,.45);border-color:transparent}
+
+  /* ---------- FECHAMENTO ---------- */
+  .fecho{background:var(--amarelo);text-align:center;padding:88px 0}
+  .fecho h2{font-size:clamp(2rem,5vw,3.6rem);max-width:20ch;margin:0 auto}
+  footer{background:#0f281c;color:#9fb3a6;padding:40px 0;font-size:.9rem}
+  footer .container{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+  /* ---------- REVELAR AO ROLAR ---------- */
+  .revelar{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+  .revelar.visivel{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .revelar{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="#topo" class="logo"><span></span>TI Verde</a>
+    <ul>
+      <li><a href="#numeros">Os números</a></li>
+      <li><a href="#entenda">Entenda</a></li>
+      <li><a href="#lei">A lei</a></li>
+      <li><a href="#parte">Faça sua parte</a></li>
+      <li><a href="#devs">Desenvolvedores</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ========== HERO: segue o rascunho (título em cima, foto à esquerda, texto à direita) ========== -->
+<header class="hero" id="topo">
+  <div class="container">
+    <div class="hero-topo revelar">
+      <p class="eyebrow">Sustentabilidade digital</p>
+      <h1>Seu celular velho não é lixo. <em>É uma mina — ou uma bomba.</em></h1>
+      <p class="hero-sub">Todo ano o mundo joga fora milhões de toneladas de tecnologia. O destino de cada aparelho depende de uma escolha sua.</p>
+    </div>
+
+    <div class="hero-grid">
+      <!-- FOTO: coloque um arquivo chamado foto.jpg na mesma pasta e ele aparece aqui automaticamente.
+           Se não houver foto, aparece a ilustração abaixo (circuito virando árvore). -->
+      <figure class="foto revelar">
+        <img src="foto.jpg" alt="Tecnologia e natureza juntas" onerror="this.remove()">
+        <svg viewBox="0 0 400 300" role="img" aria-label="Ilustração de uma placa de circuito cujas trilhas viram galhos de árvore com folhas">
+          <defs>
+            <linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#22543a"/><stop offset="1" stop-color="#163828"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="300" fill="url(#ceu)"/>
+          <circle cx="200" cy="150" r="125" fill="none" stroke="#2E6B45" stroke-width="1.5"/>
+          <!-- tronco e galhos em formato de trilha de circuito -->
+          <g fill="none" stroke="#F3F0E6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M200 300 V170"/>
+            <path d="M200 230 H150 V180 H110"/>
+            <path d="M200 210 H250 V160 H295"/>
+            <path d="M200 190 H170 V120 H140"/>
+            <path d="M200 170 V95"/>
+            <path d="M200 175 H230 V110 H265"/>
+            <path d="M150 205 H95 V235"/>
+            <path d="M250 185 H310 V215"/>
+          </g>
+          <!-- nós do circuito piscando -->
+          <g fill="#F2B544">
+            <circle class="pulso" cx="110" cy="180" r="6"/>
+            <circle class="pulso" cx="295" cy="160" r="6"/>
+            <circle class="pulso" cx="140" cy="120" r="6"/>
+            <circle class="pulso" cx="200" cy="95" r="6"/>
+            <circle class="pulso" cx="265" cy="110" r="6"/>
+            <circle class="pulso" cx="95" cy="235" r="6"/>
+            <circle class="pulso" cx="310" cy="215" r="6"/>
+          </g>
+          <!-- folhas -->
+          <g fill="#7FC28E">
+            <path class="folha" d="M110 172 c-22 -6 -30 -26 -24 -40 c16 2 30 16 24 40z"/>
+            <path class="folha" d="M295 152 c10 -22 30 -26 42 -18 c-6 16 -22 26 -42 18z"/>
+            <path class="folha" d="M140 112 c-18 -14 -18 -34 -8 -42 c12 10 18 26 8 42z"/>
+            <path class="folha" d="M200 87 c-8 -22 2 -40 16 -42 c4 18 -2 34 -16 42z"/>
+            <path class="folha" d="M265 102 c14 -18 34 -18 42 -8 c-10 12 -26 16 -42 8z"/>
+          </g>
+        </svg>
+      </figure>
+
+      <div class="hero-texto revelar">
+        <h2>Sobre o projeto</h2>
+        <p><strong>TI Verde</strong> é o conjunto de práticas que reduzem o impacto ambiental da tecnologia em todo o seu ciclo de vida: da fabricação dos equipamentos ao consumo de energia e ao descarte.</p>
+        <p>Este site, criado pela turma de Engenharia de Software do 8º semestre da UMC, mostra o tamanho do problema do lixo eletrônico, o que a lei brasileira determina, como descartar seus aparelhos do jeito certo e como quem programa também pode ajudar.</p>
+        <div class="botoes">
+          <a href="#numeros" class="btn btn-amarelo">Ver os números</a>
+          <a href="#parte" class="btn btn-contorno">Como descartar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ========== OS NÚMEROS ========== -->
+<section class="numeros" id="numeros">
+  <div class="container">
+    <p class="eyebrow">Os números</p>
+    <h2 class="titulo-secao revelar">O tamanho do problema</h2>
+
+    <div class="numeros-grid">
+      <div class="num-card revelar">
+        <div class="num" data-alvo="62" data-casas="0" data-sufixo=" mi t">0</div>
+        <p>de lixo eletrônico gerados no mundo em 2022, cerca de 7,8 kg por pessoa.</p>
+      </div>
+      <div class="num-card revelar">
+        <div class="num alerta" data-alvo="22.3" data-casas="1" data-sufixo="%">0</div>
+        <p>é só o que foi coletado e reciclado de forma documentada. O resto teve destino desconhecido.</p>
+      </div>
+      <div class="num-card revelar">
+        <div class="num" data-alvo="82" data-casas="0" data-sufixo=" mi t">0</div>
+        <p>é a previsão para 2030, se nada mudar.</p>
+      </div>
+      <div class="num-card revelar">
+        <div class="num" data-alvo="2.4" data-casas="1" data-sufixo=" mi t">0</div>
+        <p>por ano no <strong>Brasil</strong>, o 2º maior gerador das Américas, atrás apenas dos EUA.</p>
+      </div>
+    </div>
+
+    <div class="barra-wrap revelar">
+      <h3>De cada 100 kg de lixo eletrônico no mundo…</h3>
+      <div class="barra"><div class="barra-ok" id="barraOk">22,3 kg reciclados</div></div>
+      <div class="legenda"><span>Reciclado de forma documentada</span><span>77,7 kg com destino desconhecido</span></div>
+    </div>
+
+    <p class="fonte">Fontes: ONU, Global E-waste Monitor 2024; G1 (abr. 2026), dado do Brasil.</p>
+  </div>
+</section>
+
+<!-- ========== ENTENDA ========== -->
+<section class="entenda" id="entenda">
+  <div class="container duas-col">
+    <div class="revelar">
+      <p class="eyebrow">Entenda</p>
+      <h2 class="titulo-secao">O que é TI Verde?</h2>
+      <p>TI Verde é o conjunto de práticas que reduzem o impacto ambiental da tecnologia em todo o seu ciclo de vida: da fabricação dos equipamentos ao consumo de energia e ao descarte.</p>
+      <div class="perigo">
+        <h3>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F2B544" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 21h20L12 3z"/><path d="M12 10v5M12 18h.01"/></svg>
+          Por que é perigoso?
+        </h3>
+        <p style="margin-top:10px">Chumbo, mercúrio e cádmio das placas e baterias contaminam o solo e a água quando vão para o lixo comum. E metais valiosos, como ouro e cobre, são desperdiçados.</p>
+      </div>
+    </div>
+
+    <div class="revelar">
+      <h3>E o lixo eletrônico?</h3>
+      <p>Também chamado de <strong>e-lixo</strong> ou <strong>REEE</strong> (Resíduos de Equipamentos Eletroeletrônicos), é todo aparelho com bateria, plugue ou placa que chegou ao fim da vida útil:</p>
+      <div class="chips">
+        <div class="chip"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg>Celulares</div>
+        <div class="chip"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="1"/><path d="M2 19h20"/></svg>Notebooks</div>
+        <div class="chip"><svg viewBox="0 0 24 24"><path d="M9 2v5M15 2v5M6 7h12v4a6 6 0 0 1-12 0V7zM12 17v5"/></svg>Carregadores</div>
+        <div class="chip"><svg viewBox="0 0 24 24"><rect x="7" y="4" width="10" height="18" rx="2"/><path d="M10 2h4M10 13h4"/></svg>Baterias</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== LEI ========== -->
+<section class="lei" id="lei">
+  <div class="container">
+    <p class="eyebrow">Legislação</p>
+    <h2 class="titulo-secao revelar">O que diz a lei</h2>
+
+    <div class="lei-cards">
+      <div class="lei-card revelar">
+        <h3>Lei nº 12.305/2010 (PNRS)</h3>
+        <p>A Política Nacional de Resíduos Sólidos cria a <strong>responsabilidade compartilhada</strong>: fabricantes, comerciantes e consumidores respondem juntos pelo destino do produto.</p>
+      </div>
+      <div class="lei-card revelar">
+        <h3>Decreto nº 10.240/2020</h3>
+        <p>Regulamenta a <strong>logística reversa</strong> dos eletroeletrônicos de uso doméstico: o aparelho usado volta para a cadeia e é reciclado corretamente.</p>
+      </div>
+    </div>
+
+    <div class="ciclo">
+      <h3 class="revelar">O ciclo da logística reversa</h3>
+      <div class="ciclo-passos">
+        <div class="passo revelar"><b>1</b>Fabricante produz</div>
+        <div class="passo revelar"><b>2</b>Loja vende</div>
+        <div class="passo revelar"><b>3</b>Você usa e devolve</div>
+        <div class="passo revelar"><b>4</b>Ponto de coleta recebe</div>
+        <div class="passo revelar"><b>5</b>Reciclagem: metais e plásticos voltam como matéria-prima</div>
+      </div>
+      <div class="perto revelar">
+        <strong>Mais perto do que você imagina:</strong> ferros-velhos, recicladores e empresas de gestão de resíduos da sua cidade fazem parte desse ciclo.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FAÇA SUA PARTE ========== -->
+<section class="parte" id="parte">
+  <div class="container duas-col">
+    <div class="revelar">
+      <p class="eyebrow">Faça a sua parte</p>
+      <h2 class="titulo-secao">Antes de descartar</h2>
+      <p>Toque em cada etapa conforme for concluindo:</p>
+      <ul class="checklist" id="checklist">
+        <li><button aria-pressed="false"><span class="bola">1</span><span>Faça <strong>backup</strong> das fotos e arquivos.</span></button></li>
+        <li><button aria-pressed="false"><span class="bola">2</span><span>Saia das suas contas e <strong>restaure o aparelho de fábrica</strong>: seus dados pessoais não podem ir junto.</span></button></li>
+        <li><button aria-pressed="false"><span class="bola">3</span><span>Retire o <strong>chip</strong> e o <strong>cartão de memória</strong>.</span></button></li>
+        <li><button aria-pressed="false"><span class="bola">4</span><span>Ainda funciona? <strong>Doe ou venda.</strong> Estragou? Tente <strong>consertar</strong> primeiro.</span></button></li>
+      </ul>
+      <p class="progresso" id="progresso" aria-live="polite">0 de 4 etapas concluídas</p>
+    </div>
+
+    <div class="revelar">
+      <h2 class="titulo-secao">Onde descartar</h2>
+      <ul class="onde">
+        <li><span class="ok">✓</span><span>Lojas e fabricantes que recebem aparelhos usados</span></li>
+        <li><span class="ok">✓</span><span>Ecopontos da prefeitura da sua cidade</span></li>
+        <li><span class="ok">✓</span><span>Mapas de pontos de coleta: <a href="https://greeneletron.org.br" target="_blank" rel="noopener">greeneletron.org.br</a> e <a href="https://abree.org.br" target="_blank" rel="noopener">abree.org.br</a></span></li>
+        <li><span class="ok">✓</span><span><strong>Ferros-velhos e recicladores</strong> também reciclam: dão o destino certo e ainda geram renda para muita gente</span></li>
+        <li><span class="nao">✕</span><span><strong>Nunca</strong> no lixo comum</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== DESENVOLVEDORES ========== -->
+<section class="devs" id="devs">
+  <div class="container">
+    <p class="eyebrow">Para desenvolvedores</p>
+    <h2 class="titulo-secao revelar">Software também gasta energia</h2>
+    <p class="revelar" style="max-width:60ch">Cada linha de código roda em um servidor e em um aparelho. Boas práticas:</p>
+
+    <div class="devs-grid">
+      <div class="dev-card revelar"><h3>Código eficiente</h3><p>Menos processamento significa menos energia no servidor e mais bateria no celular.</p></div>
+      <div class="dev-card revelar"><h3>Front-end leve</h3><p>Use a ferramenta do tamanho do problema: uma página simples não precisa de framework pesado. Ferramentas como o Astro entregam HTML pronto e só carregam JavaScript onde há interação. Comprima imagens (<code>WebP</code>/<code>AVIF</code>).</p></div>
+      <div class="dev-card revelar"><h3>Cache e menos requisições</h3><p>Não busque de novo dados que não mudaram.</p></div>
+      <div class="dev-card revelar"><h3>Nuvem enxuta</h3><p>Desligue ambientes ociosos e prefira regiões com energia renovável.</p></div>
+      <div class="dev-card revelar"><h3>Compatibilidade</h3><p>Sistemas que rodam bem em aparelhos antigos adiam a troca de equipamento e o e-lixo.</p></div>
+      <div class="dev-card meta revelar"><h3>Este site pratica o que fala</h3><p>Nenhum framework, nenhuma biblioteca JavaScript: é um único arquivo HTML, leve de propósito.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FECHAMENTO ========== -->
+<section class="fecho">
+  <div class="container revelar">
+    <h2>Tecnologia sustentável começa no código e termina no descarte certo.</h2>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span>Turma de Eng. de Software 8º semestre, UMC.</span>
+    <span>Fontes: ONU, Global E-waste Monitor 2024; G1 (abr. 2026).</span>
+  </div>
+</footer>
+
+<script>
+  // 1) Revela os blocos conforme o usuário rola a página
+  const observador = new IntersectionObserver((entradas) => {
+    entradas.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visivel');
+        observador.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.revelar').forEach((el) => observador.observe(el));
+
+  // 2) Contadores animados (0 -> valor final) na seção de números
+  const semAnimacao = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function animarNumero(el) {
+    const alvo = parseFloat(el.dataset.alvo);
+    const casas = parseInt(el.dataset.casas, 10);
+    const sufixo = el.dataset.sufixo;
+    const formatar = (v) => v.toLocaleString('pt-BR', { minimumFractionDigits: casas, maximumFractionDigits: casas }) + sufixo;
+    if (semAnimacao) { el.textContent = formatar(alvo); return; }
+    const duracao = 1600, inicio = performance.now();
+    function quadro(agora) {
+      const t = Math.min((agora - inicio) / duracao, 1);
+      const suave = 1 - Math.pow(1 - t, 3);
+      el.textContent = formatar(alvo * suave);
+      if (t < 1) requestAnimationFrame(quadro);
+    }
+    requestAnimationFrame(quadro);
+  }
+  const obsNumeros = new IntersectionObserver((entradas) => {
+    entradas.forEach((e) => {
+      if (e.isIntersecting) { animarNumero(e.target); obsNumeros.unobserve(e.target); }
+    });
+  }, { threshold: 0.6 });
+  document.querySelectorAll('.num').forEach((el) => obsNumeros.observe(el));
+
+  // 3) Barra de 22,3% reciclado
+  const barra = document.getElementById('barraOk');
+  new IntersectionObserver((entradas, obs) => {
+    if (entradas[0].isIntersecting) { barra.style.width = '22.3%'; obs.disconnect(); }
+  }, { threshold: 0.5 }).observe(barra);
+
+  // 4) Checklist interativo "Antes de descartar"
+  const botoes = document.querySelectorAll('#checklist button');
+  const progresso = document.getElementById('progresso');
+  botoes.forEach((b) => b.addEventListener('click', () => {
+    b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+    const feitos = document.querySelectorAll('#checklist button[aria-pressed="true"]').length;
+    progresso.textContent = feitos === 4
+      ? 'Tudo pronto! Agora leve o aparelho a um ponto de coleta. ♻'
+      : `${feitos} de 4 etapas concluídas`;
+  }));
+</script>
+</body>
+</html>
